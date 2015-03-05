@@ -15,50 +15,47 @@
  */
 package pl.com.bottega.ecommerce.sales.domain.client;
 
-import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.ClientData;
+import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
 import pl.com.bottega.ecommerce.sales.domain.payment.Payment;
-import pl.com.bottega.ecommerce.sales.domain.payment.PaymentFactory;
 import pl.com.bottega.ecommerce.sharedkernel.Money;
-
 
 public class Client {
 
 	private String name;
-	
-	
-	private PaymentFactory paymentFactory;
 
 	private Id aggregateId;
-	
-	public ClientData generateSnapshot(){
+
+	public ClientData generateSnapshot() {
 		return new ClientData(aggregateId, name);
 	}
 
-	public boolean canAfford(Money amount) {		
+	public boolean canAfford(Money amount) {
 		return true;
 	}
 
 	/**
 	 * Sample model: one aggregate creates another.<br>
-	 * Client model does not compose Payment - therefore it does not manage Payment lifecycle.<br>
+	 * Client model does not compose Payment - therefore it does not manage
+	 * Payment lifecycle.<br>
 	 * Application layer is responsible for managing Payment lifecycle;
 	 * 
 	 * @param amount
 	 * @return
 	 */
 	public Payment charge(Money amount) {
-		if (! canAfford(amount)){			
+		if (!canAfford(amount)) {
 			domainError("Can not afford: " + amount);
 		}
 		// TODO facade to the payment module
-		
-		return paymentFactory.createPayment(generateSnapshot(), amount);
+		Id id = Id.generate();
+		return new Payment(id, generateSnapshot(), amount);
+
 	}
 
 	private void domainError(String string) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public Id getAggregateId() {

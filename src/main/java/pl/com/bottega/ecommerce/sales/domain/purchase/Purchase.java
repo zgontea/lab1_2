@@ -17,8 +17,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.ClientData;
+import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
 import pl.com.bottega.ecommerce.sharedkernel.Money;
 
 public class Purchase {
@@ -69,7 +69,7 @@ public class Purchase {
     }
 
     public Collection<PurchaseItem> getItems() {
-        return (Collection<PurchaseItem>) Collections.unmodifiableCollection(items);
+        return Collections.unmodifiableCollection(items);
     }
 
     public Id getAggregateId() {

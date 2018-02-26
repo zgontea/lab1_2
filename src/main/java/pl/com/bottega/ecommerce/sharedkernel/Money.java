@@ -15,8 +15,7 @@ package pl.com.bottega.ecommerce.sharedkernel;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
-
-import org.fest.util.Objects;
+import java.util.Objects;
 
 public class Money {
 
@@ -44,11 +43,11 @@ public class Money {
     }
 
     public Money(double denomination, Currency currency) {
-        this(new BigDecimal(denomination), currency.getCurrencyCode());
+        this(BigDecimal.valueOf(denomination), currency.getCurrencyCode());
     }
 
     public Money(double denomination, String currencyCode) {
-        this(new BigDecimal(denomination), currencyCode);
+        this(BigDecimal.valueOf(denomination), currencyCode);
     }
 
     public Money(double denomination) {
@@ -56,7 +55,7 @@ public class Money {
     }
 
     public Money multiplyBy(double multiplier) {
-        return multiplyBy(new BigDecimal(multiplier));
+        return multiplyBy(BigDecimal.valueOf(multiplier));
     }
 
     public Money multiplyBy(BigDecimal multiplier) {
@@ -72,8 +71,9 @@ public class Money {
     }
 
     public Money subtract(Money money) {
-        if (!compatibleCurrency(money))
+        if (!compatibleCurrency(money)) {
             throw new IllegalArgumentException("Currency mismatch");
+        }
 
         return new Money(denomination.subtract(money.denomination), determineCurrencyCode(money));
     }
@@ -120,28 +120,31 @@ public class Money {
 
     @Override
     public String toString() {
-        return String.format("%0$.2f %s", denomination, getCurrency().getSymbol());
+        return denomination + " " + getCurrency().getSymbol();
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((currencyCode == null) ? 0 : currencyCode.hashCode());
-        result = prime * result + ((denomination == null) ? 0 : denomination.hashCode());
+        result = prime * result + (currencyCode == null ? 0 : currencyCode.hashCode());
+        result = prime * result + (denomination == null ? 0 : denomination.hashCode());
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Money other = (Money) obj;
-        return compatibleCurrency(other) && Objects.areEqual(denomination, other.denomination);
+        return compatibleCurrency(other) && Objects.equals(denomination, other.denomination);
     }
 
 }

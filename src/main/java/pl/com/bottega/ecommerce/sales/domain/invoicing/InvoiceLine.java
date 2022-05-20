@@ -58,4 +58,8 @@ public class InvoiceLine {
     public Tax getTax() {
         return tax;
     }
+
+    public static InvoiceLine createInvoiceLine(ProductData product, int quantity, Money net, Tax tax) {
+        return new InvoiceLine(product, quantity, net, tax);
+    }
 }
